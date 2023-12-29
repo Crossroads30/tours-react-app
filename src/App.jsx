@@ -10,7 +10,8 @@ function App() {
 	const [isError, setIsError] = useState(false)
 
 	const removeTour = id => {
-		setTours(tours.filter(tour => tour.id !== id))
+		const newTours = tours.filter(tour => tour.id !== id)
+		setTours(newTours)
 	}
 
 	const fetchData = async () => {
@@ -40,16 +41,26 @@ function App() {
 	if (loading) {
 		return (
 			<main>
-				<Loading removeTour={removeTour} />
+				<Loading />
 			</main>
 		)
 	}
 	if (isError) {
 		return <h3>There was an error!</h3>
 	}
+	if (tours.length === 0) {
+		return (
+			<main>
+				<div className='title'>
+					<h2>no tours left</h2>
+					<button className='btn' onClick={fetchData}>refresh</button>
+				</div>
+			</main>
+		)
+	}
 	return (
 		<main className='main'>
-			<Tours tours={tours} />
+			<Tours tours={tours} removeTour={removeTour} />
 		</main>
 	)
 }
